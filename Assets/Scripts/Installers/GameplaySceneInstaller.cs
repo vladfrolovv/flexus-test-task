@@ -35,6 +35,7 @@ namespace Installers
             Container.Bind<GraphicRaycaster>().FromComponentInHierarchy().AsSingle();
             Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle().NonLazy();
 
+            InstallPrefabs();
         }
 
         private void InstallPrefabs()

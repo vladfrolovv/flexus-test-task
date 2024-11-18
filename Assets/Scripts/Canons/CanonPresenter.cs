@@ -1,5 +1,6 @@
 ﻿using System;
 using Cameras;
+using Canons.CannonBalls;
 using DG.Tweening;
 using Inputs;
 using UniRx;
@@ -14,6 +15,7 @@ namespace Canons
         private readonly CanonView _canonView;
         private readonly CameraView _cameraView;
         private readonly CameraShakeEffect _cameraShakeEffect;
+        private readonly CannonballFactory _cannonballFactory;
 
         private readonly float _standardCanonBarrelZ;
 
@@ -24,13 +26,14 @@ namespace Canons
         private float _currentPitch;
 
         public CanonPresenter(CanonInput canonInput, KeyboardInput keyboardInput, CanonView canonView, CanonBarrelView canonBarrelView, CanonConfig canonConfig,
-                              CameraView cameraView, CameraShakeEffect cameraShakeEffect)
+                              CameraView cameraView, CameraShakeEffect cameraShakeEffect, CannonballFactory cannonballFactory)
         {
             _canonBarrelView = canonBarrelView;
             _canonConfig = canonConfig;
             _canonView = canonView;
             _cameraView = cameraView;
             _cameraShakeEffect = cameraShakeEffect;
+            _cannonballFactory = cannonballFactory;
 
             _standardCanonBarrelZ = _canonBarrelView.LocalPosition.z;
             _distanceFromCamera = Vector2.Distance(
@@ -79,6 +82,8 @@ namespace Canons
 
         private void Shot()
         {
+            Cannonball cannonball = _cannonballFactory.Create(new CannonballInfo());
+            cannonball.transform.position = Vector3.zero;
         }
 
         private void AnimateShot()

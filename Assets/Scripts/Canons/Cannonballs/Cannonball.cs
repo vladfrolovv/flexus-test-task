@@ -6,6 +6,8 @@ namespace Canons.CannonBalls
     public class Cannonball : MonoBehaviour, IPoolable<CannonballInfo, IMemoryPool>, IDisposable
     {
 
+        [SerializeField] private MeshFilter _meshFilter;
+
         private CannonballInfo _info;
         private IMemoryPool _pool;
 
@@ -13,6 +15,8 @@ namespace Canons.CannonBalls
         {
             _info = info;
             _pool = pool;
+
+            _meshFilter.mesh = CannonballMeshGenerator.CreateCannonballMesh(new CannonballMeshInfo(.25f, .01f));
         }
 
         public void OnDespawned()
