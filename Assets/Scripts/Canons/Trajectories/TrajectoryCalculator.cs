@@ -1,5 +1,5 @@
 using System;
-using Canons.Projectiles;
+using Canons.CannonBalls;
 using Inputs;
 using UniRx;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace Canons.Trajectories
         private const float Gravity = 9.81f;
         private const int Resolution = 32;
 
-        private readonly ProjectileLaunchPoint _projectileLaunchPoint;
+        private readonly CannonballLaunchPoint _cannonballLaunchPoint;
         private readonly PowerSliderObserver _powerSliderObserver;
         private readonly CanonConfig _canonConfig;
 
@@ -20,10 +20,10 @@ namespace Canons.Trajectories
         private readonly ReactiveProperty<TrajectoryInfo> _trajectory = new ();
         public IReadOnlyReactiveProperty<TrajectoryInfo> Trajectory => _trajectory;
 
-        public TrajectoryCalculator(PowerSliderObserver powerSliderObserver, KeyboardInput keyboardInput, ProjectileLaunchPoint projectileLaunchPoint,
+        public TrajectoryCalculator(PowerSliderObserver powerSliderObserver, KeyboardInput keyboardInput, CannonballLaunchPoint cannonballLaunchPoint,
                                     CanonConfig canonConfig)
         {
-            _projectileLaunchPoint = projectileLaunchPoint;
+            _cannonballLaunchPoint = cannonballLaunchPoint;
             _powerSliderObserver = powerSliderObserver;
             _canonConfig = canonConfig;
 
@@ -45,8 +45,8 @@ namespace Canons.Trajectories
 
         private Vector3[] GetTrajectoryPoints(float power)
         {
-            Vector3 startPosition = _projectileLaunchPoint.Position;
-            Vector3 direction = _projectileLaunchPoint.Direction;
+            Vector3 startPosition = _cannonballLaunchPoint.Position;
+            Vector3 direction = _cannonballLaunchPoint.Direction;
 
             Vector3 velocity = direction * power * _canonConfig.PowerStep;
             Vector3 horizontalVelocity = new (velocity.x, 0, velocity.z);
@@ -67,7 +67,7 @@ namespace Canons.Trajectories
 
         public void Dispose()
         {
-            _compositeDisposable.Dispose();
+            _compositeDisposable?.Dispose();
         }
 
     }

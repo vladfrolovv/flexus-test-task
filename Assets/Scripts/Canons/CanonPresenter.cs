@@ -13,6 +13,7 @@ namespace Canons
         private readonly CanonConfig _canonConfig;
         private readonly CanonView _canonView;
         private readonly CameraView _cameraView;
+        private readonly CameraShakeEffect _cameraShakeEffect;
 
         private readonly float _standardCanonBarrelZ;
 
@@ -23,12 +24,13 @@ namespace Canons
         private float _currentPitch;
 
         public CanonPresenter(CanonInput canonInput, KeyboardInput keyboardInput, CanonView canonView, CanonBarrelView canonBarrelView, CanonConfig canonConfig,
-                              CameraView cameraView)
+                              CameraView cameraView, CameraShakeEffect cameraShakeEffect)
         {
             _canonBarrelView = canonBarrelView;
             _canonConfig = canonConfig;
             _canonView = canonView;
             _cameraView = cameraView;
+            _cameraShakeEffect = cameraShakeEffect;
 
             _standardCanonBarrelZ = _canonBarrelView.LocalPosition.z;
             _distanceFromCamera = Vector2.Distance(
@@ -81,6 +83,8 @@ namespace Canons
 
         private void AnimateShot()
         {
+            _cameraShakeEffect.Shake();
+
             // todo change DoLocalMoveZ to DoMove to animate the barrel dependent on its quaternion
             Sequence sequence = DOTween.Sequence();
             sequence.Append(_canonBarrelView.transform.DOLocalMoveZ(_standardCanonBarrelZ - 0.25f, 0.08f).SetEase(Ease.InBack));

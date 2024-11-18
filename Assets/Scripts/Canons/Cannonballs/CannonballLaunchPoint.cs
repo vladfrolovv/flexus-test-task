@@ -1,7 +1,7 @@
 using UnityEngine;
-namespace Canons.Projectiles
+namespace Canons.CannonBalls
 {
-    public class ProjectileLaunchPoint : MonoBehaviour
+    public class CannonballLaunchPoint : MonoBehaviour
     {
 
         [SerializeField] private Transform _directionPoint;
