@@ -9,10 +9,16 @@ namespace Canons
             set => transform.position = value;
         }
 
-        public Quaternion Rotation
+        public Vector3 LocalPosition
         {
-            get => transform.rotation;
-            set => transform.rotation = value;
+            get => transform.localPosition;
+            set => transform.localPosition = value;
+        }
+
+        public Quaternion LocalRotation
+        {
+            get => transform.localRotation;
+            set => transform.localRotation = value;
         }
     }
 }

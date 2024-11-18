@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using Cameras;
 using DG.Tweening;
 using Inputs;
+using TMPro;
 using UniRx;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 namespace Canons
 {
     public class CanonPresenter : IDisposable
@@ -18,6 +21,8 @@ namespace Canons
 
         private readonly CompositeDisposable _compositeDisposable = new();
 
+        private readonly float _distanceFromCamera;
+        private readonly float _angleFromCamera;
         private float _currentPitch;
 
         public CanonPresenter(CanonInput canonInput, KeyboardInput keyboardInput, CanonView canonView, CanonBarrelView canonBarrelView, CanonConfig canonConfig,
@@ -28,11 +33,16 @@ namespace Canons
             _canonView = canonView;
             _cameraView = cameraView;
 
-            _standardCanonBarrelZ = _canonBarrelView.transform.localPosition.z;
+            _standardCanonBarrelZ = _canonBarrelView.LocalPosition.z;
+            _distanceFromCamera = Vector2.Distance(
+                new Vector2(_canonView.Position.x, _canonView.Position.z),
+                new Vector2(_cameraView.Position.x, _cameraView.Position.z));
+
+            _angleFromCamera = Mathf.Asin((_canonView.Position.z - _cameraView.Position.z) / _distanceFromCamera) * Mathf.Rad2Deg;
 
             keyboardInput.Direction.Subscribe(delegate (Vector2Int direction)
             {
-                CanonRotation(direction);
+                CanonRotation();
                 CanonBarrelElevation(direction);
             }).AddTo(_compositeDisposable);
 
@@ -48,21 +58,25 @@ namespace Canons
             float deltaPitch = -direction.y * _canonConfig.ElevationSpeed;
 
             _currentPitch = Mathf.Clamp(_currentPitch - deltaPitch, _canonConfig.MinElevation, _canonConfig.MaxElevation);
-            _canonBarrelView.Rotation = Quaternion.Euler(-_currentPitch, 0, 0);
+            _canonBarrelView.LocalRotation = Quaternion.Euler(-_currentPitch, 0, 0);
         }
 
-        private void CanonRotation(Vector2Int direction)
+        private void CanonRotation()
         {
-            float deltaYaw = direction.x * cameraPanConfig.PanSpeed;
-            _currentYaw = Mathf.Clamp(_currentYaw + deltaYaw, -cameraPanConfig.MaxYaw, cameraPanConfig.MaxYaw);
+            float yaw = _cameraView.Rotation.eulerAngles.y + _angleFromCamera;
 
-            cameraView.Rotation = Quaternion.Euler(0, _currentYaw, 0);
-            cameraView.Rotation *= Quaternion.Euler(Vector3.up * direction.x * cameraPanConfig.PanSpeed);
+            Vector3 newPosition = new (
+                _cameraView.Position.x + Mathf.Sin(yaw * Mathf.Deg2Rad) * _distanceFromCamera,
+                _canonView.Position.y,
+                _cameraView.Position.z + Mathf.Cos(yaw * Mathf.Deg2Rad) * _distanceFromCamera
+            );
+
+            _canonView.Position = newPosition;
+            _canonView.Rotation = _cameraView.Rotation;
         }
 
         private void Shot()
         {
-            throw new NotImplementedException();
         }
 
         private void AnimateShot()
