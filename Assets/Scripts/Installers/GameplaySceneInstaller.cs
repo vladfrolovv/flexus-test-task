@@ -10,13 +10,14 @@ namespace Installers
         public override void InstallBindings()
         {
 
-            Container.BindInterfacesAndSelfTo<MouseInput>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<CanonInput>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<KeyboardInput>().AsSingle().NonLazy();
 
             Container.Bind<CameraView>().FromComponentInHierarchy().AsSingle();
             Container.BindInterfacesAndSelfTo<CameraPanController>().AsSingle().NonLazy();
 
             Container.Bind<CanonView>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<CanonBarrelView>().FromComponentInHierarchy().AsSingle();
             Container.BindInterfacesAndSelfTo<CanonPresenter>().AsSingle().NonLazy();
 
         }

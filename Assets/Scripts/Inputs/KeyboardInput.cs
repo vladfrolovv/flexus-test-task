@@ -6,11 +6,8 @@ namespace Inputs
     public class KeyboardInput : IDisposable
     {
 
-        private const string HorizontalAxis = "Horizontal";
-        private const string VerticalAxis = "Vertical";
-
         private readonly CompositeDisposable _compositeDisposable = new();
-        private readonly Subject<Vector2> _direction = new ();
+        private readonly Subject<Vector2Int> _direction = new ();
 
         public KeyboardInput()
         {
@@ -18,13 +15,26 @@ namespace Inputs
                 .EveryUpdate()
                 .Subscribe(delegate
                 {
-                    Vector2 direction = new Vector2(Input.GetAxis(HorizontalAxis), Input.GetAxis(VerticalAxis));
-
-                    _direction.OnNext(direction);
+                    if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+                    {
+                        _direction.OnNext(Vector2Int.left);
+                    }
+                    else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+                    {
+                        _direction.OnNext(Vector2Int.right);
+                    }
+                    else if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+                    {
+                        _direction.OnNext(Vector2Int.up);
+                    }
+                    else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+                    {
+                        _direction.OnNext(Vector2Int.down);
+                    }
                 }).AddTo(_compositeDisposable);
         }
 
-        public IObservable<Vector2> Direction => _direction;
+        public IObservable<Vector2Int> Direction => _direction;
 
         public void Dispose()
         {

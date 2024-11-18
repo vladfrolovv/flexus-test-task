@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbf2d21786f34717866172a99ff0cc5c, type: 3}
-  m_Name: ConfigsInstaller
+  m_Script: {fileID: 11500000, guid: 0759fc5a24a348ff91f6f101a92d1624, type: 3}
+  m_Name: CanonConfig
   m_EditorClassIdentifier: 
-  _cameraPanConfig: {fileID: 11400000, guid: 1a59ef1b64069d24393ee5e689d239ff, type: 2}
-  _canonConfig: {fileID: 11400000, guid: 1aa8d74e83117f540a5ce0123e027f40, type: 2}
+  _maxElevation: 30
+  _minElevation: 0
+  _elevationSpeed: 0.5

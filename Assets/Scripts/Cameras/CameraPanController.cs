@@ -9,13 +9,13 @@ namespace Cameras
 
         private readonly CompositeDisposable _compositeDisposable = new();
 
-        private float _currentYaw = 0f;
+        private float _currentYaw;
 
         public CameraPanController(KeyboardInput keyboardInput, CameraView cameraView, CameraPanConfig cameraPanConfig)
         {
             keyboardInput
                 .Direction
-                .Subscribe(delegate (Vector2 direction)
+                .Subscribe(delegate (Vector2Int direction)
                 {
                     float deltaYaw = direction.x * cameraPanConfig.PanSpeed;
                     _currentYaw = Mathf.Clamp(_currentYaw + deltaYaw, -cameraPanConfig.MaxYaw, cameraPanConfig.MaxYaw);
