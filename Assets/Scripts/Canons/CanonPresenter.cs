@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using Cameras;
 using DG.Tweening;
 using Inputs;
-using TMPro;
 using UniRx;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 namespace Canons
 {
     public class CanonPresenter : IDisposable
@@ -81,6 +78,7 @@ namespace Canons
 
         private void AnimateShot()
         {
+            // todo change DoLocalMoveZ to DoMove to animate the barrel dependent on its quaternion
             Sequence sequence = DOTween.Sequence();
             sequence.Append(_canonBarrelView.transform.DOLocalMoveZ(_standardCanonBarrelZ - 0.25f, 0.08f).SetEase(Ease.InBack));
             sequence.AppendInterval(0.05f);

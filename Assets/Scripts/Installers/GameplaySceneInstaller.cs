@@ -1,5 +1,7 @@
 ﻿using Cameras;
 using Canons;
+using Canons.Projectiles;
+using Canons.Trajectories;
 using Inputs;
 using Zenject;
 namespace Installers
@@ -20,6 +22,10 @@ namespace Installers
             Container.Bind<CanonBarrelView>().FromComponentInHierarchy().AsSingle();
             Container.BindInterfacesAndSelfTo<CanonPresenter>().AsSingle().NonLazy();
 
+            Container.Bind<PowerSliderObserver>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<ProjectileLaunchPoint>().FromComponentInHierarchy().AsSingle();
+            
+            Container.BindInterfacesAndSelfTo<TrajectoryCalculator>().AsSingle().NonLazy();
         }
 
     }

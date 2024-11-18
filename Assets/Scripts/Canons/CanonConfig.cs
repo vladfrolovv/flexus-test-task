@@ -5,15 +5,19 @@ namespace Canons
     public class CanonConfig : ScriptableObject
     {
 
+        [Header("Canon Movement")]
         [SerializeField] private float _maxElevation = 45f;
-        [SerializeField] private float _minElevation = 0f;
+        [SerializeField] private float _minElevation;
         [SerializeField] private float _elevationSpeed = 1f;
-        [SerializeField] private float _rotationSpeed;
+
+        [Header("Canon Power")]
+        [SerializeField] private float _powerStep = 1f;
 
         public float MaxElevation => _maxElevation;
         public float MinElevation => _minElevation;
-
         public float ElevationSpeed => _elevationSpeed;
+
+        public float PowerStep => _powerStep;
 
     }
 }
