@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e30e84e5a548c09222a9fc4e11d820, type: 3}
   m_Name: CameraPanConfig
   m_EditorClassIdentifier: 
-  _panSpeed: 0.25
+  _panSpeed: 0.1
   _maxYaw: 45

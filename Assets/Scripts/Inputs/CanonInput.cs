@@ -9,12 +9,13 @@ namespace Inputs
         private readonly CompositeDisposable _compositeDisposable = new();
         private readonly Subject<bool> _shotInput = new();
 
-        public CanonInput()
+        public CanonInput(InputBlocker inputBlocker)
         {
             Observable
                 .EveryUpdate()
                 .Subscribe(delegate
                 {
+                    if (inputBlocker.IsPointerOverUI()) return;
                     if (Input.GetKeyDown(KeyCode.Space))
                     {
                         _shotInput.OnNext(true);
@@ -32,6 +33,8 @@ namespace Inputs
         {
             _compositeDisposable?.Dispose();
         }
+
+
 
     }
 }

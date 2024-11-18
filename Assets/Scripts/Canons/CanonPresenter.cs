@@ -37,17 +37,20 @@ namespace Canons
 
             _angleFromCamera = Mathf.Asin((_canonView.Position.z - _cameraView.Position.z) / _distanceFromCamera) * Mathf.Rad2Deg;
 
-            keyboardInput.Direction.Subscribe(delegate (Vector2Int direction)
-            {
-                CanonRotation();
-                CanonBarrelElevation(direction);
-            }).AddTo(_compositeDisposable);
+            CanonRotation();
 
+            keyboardInput.Direction.Subscribe(CanonControls).AddTo(_compositeDisposable);
             canonInput.ShotInput.Subscribe(delegate (bool b)
             {
                 Shot();
                 AnimateShot();
             }).AddTo(_compositeDisposable);
+        }
+
+        private void CanonControls(Vector2Int direction)
+        {
+            CanonRotation();
+            CanonBarrelElevation(direction);
         }
 
         private void CanonBarrelElevation(Vector2Int direction)

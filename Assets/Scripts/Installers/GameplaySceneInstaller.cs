@@ -3,6 +3,7 @@ using Canons;
 using Canons.Projectiles;
 using Canons.Trajectories;
 using Inputs;
+using UnityEngine.UI;
 using Zenject;
 namespace Installers
 {
@@ -26,6 +27,10 @@ namespace Installers
             Container.Bind<ProjectileLaunchPoint>().FromComponentInHierarchy().AsSingle();
             
             Container.BindInterfacesAndSelfTo<TrajectoryCalculator>().AsSingle().NonLazy();
+
+            Container.Bind<GraphicRaycaster>().FromComponentInHierarchy().AsSingle();
+            Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle().NonLazy();
+
         }
 
     }
