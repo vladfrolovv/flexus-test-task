@@ -7,12 +7,12 @@ using UniRx;
 using UnityEngine;
 namespace Canons
 {
-    public class CanonPresenter : IDisposable
+    public class CannonPresenter : IDisposable
     {
 
-        private readonly CanonBarrelView _canonBarrelView;
-        private readonly CanonConfig _canonConfig;
-        private readonly CanonView _canonView;
+        private readonly CannonBarrelView _cannonBarrelView;
+        private readonly CannonConfig _cannonConfig;
+        private readonly CannonView _cannonView;
         private readonly CameraView _cameraView;
         private readonly CameraShakeEffect _cameraShakeEffect;
         private readonly CannonballFactory _cannonballFactory;
@@ -20,29 +20,31 @@ namespace Canons
 
         private readonly CompositeDisposable _compositeDisposable = new();
 
+        private readonly Vector3 _standardCanonBarrelPosition;
+
         private readonly float _distanceFromCamera;
         private readonly float _angleFromCamera;
         private float _currentPitch;
 
-        private Vector3 _standardCanonBarrelPosition;
+        private DateTime _lastShotTime;
 
-        public CanonPresenter(CanonInput canonInput, KeyboardInput keyboardInput, CanonView canonView, CanonBarrelView canonBarrelView, CanonConfig canonConfig,
+        public CannonPresenter(CanonInput canonInput, KeyboardInput keyboardInput, CannonView cannonView, CannonBarrelView cannonBarrelView, CannonConfig cannonConfig,
                               CameraView cameraView, CameraShakeEffect cameraShakeEffect, CannonballFactory cannonballFactory, CannonballLaunchPoint cannonballLaunchPoint)
         {
-            _canonBarrelView = canonBarrelView;
-            _canonConfig = canonConfig;
-            _canonView = canonView;
+            _cannonBarrelView = cannonBarrelView;
+            _cannonConfig = cannonConfig;
+            _cannonView = cannonView;
             _cameraView = cameraView;
             _cameraShakeEffect = cameraShakeEffect;
             _cannonballFactory = cannonballFactory;
             _cannonballLaunchPoint = cannonballLaunchPoint;
 
-            _standardCanonBarrelPosition = _canonBarrelView.LocalPosition;
+            _standardCanonBarrelPosition = _cannonBarrelView.LocalPosition;
             _distanceFromCamera = Vector2.Distance(
-                new Vector2(_canonView.Position.x, _canonView.Position.z),
+                new Vector2(_cannonView.Position.x, _cannonView.Position.z),
                 new Vector2(_cameraView.Position.x, _cameraView.Position.z));
 
-            _angleFromCamera = Mathf.Asin((_canonView.Position.z - _cameraView.Position.z) / _distanceFromCamera) * Mathf.Rad2Deg;
+            _angleFromCamera = Mathf.Asin((_cannonView.Position.z - _cameraView.Position.z) / _distanceFromCamera) * Mathf.Rad2Deg;
 
             CanonRotation();
 
@@ -50,8 +52,14 @@ namespace Canons
             keyboardInput.YawDirection.Subscribe(CanonRotation).AddTo(_compositeDisposable);
             canonInput.ShotInput.Subscribe(delegate (bool b)
             {
+                if ((DateTime.Now - _lastShotTime).TotalSeconds < _cannonConfig.ShotCooldown)
+                {
+                    return;
+                }
                 Shot();
                 AnimateShot();
+
+                _lastShotTime = DateTime.Now;
             }).AddTo(_compositeDisposable);
         }
 
@@ -62,10 +70,10 @@ namespace Canons
 
         private void CanonBarrelElevation(Vector2Int direction)
         {
-            float deltaPitch = -direction.y * _canonConfig.ElevationSpeed;
+            float deltaPitch = -direction.y * _cannonConfig.ElevationSpeed;
 
-            _currentPitch = Mathf.Clamp(_currentPitch - deltaPitch, _canonConfig.MinElevation, _canonConfig.MaxElevation);
-            _canonBarrelView.LocalRotation = Quaternion.Euler(-_currentPitch, 0, 0);
+            _currentPitch = Mathf.Clamp(_currentPitch - deltaPitch, _cannonConfig.MinElevation, _cannonConfig.MaxElevation);
+            _cannonBarrelView.LocalRotation = Quaternion.Euler(-_currentPitch, 0, 0);
         }
 
         private void CanonRotation()
@@ -74,12 +82,12 @@ namespace Canons
 
             Vector3 newPosition = new (
                 _cameraView.Position.x + Mathf.Sin(yaw * Mathf.Deg2Rad) * _distanceFromCamera,
-                _canonView.Position.y,
+                _cannonView.Position.y,
                 _cameraView.Position.z + Mathf.Cos(yaw * Mathf.Deg2Rad) * _distanceFromCamera
             );
 
-            _canonView.Position = newPosition;
-            _canonView.Rotation = _cameraView.Rotation;
+            _cannonView.Position = newPosition;
+            _cannonView.Rotation = _cameraView.Rotation;
         }
 
         private void Shot()
@@ -94,9 +102,9 @@ namespace Canons
             _cameraShakeEffect.Shake();
 
             Sequence sequence = DOTween.Sequence();
-            sequence.Append(_canonBarrelView.transform.DOLocalMove(_standardCanonBarrelPosition - _cannonballLaunchPoint.Direction * 0.25f, 0.08f).SetEase(Ease.InBack));
+            sequence.Append(_cannonBarrelView.transform.DOLocalMove(_standardCanonBarrelPosition - _cannonballLaunchPoint.Direction * 0.25f, 0.08f).SetEase(Ease.InBack));
             sequence.AppendInterval(0.05f);
-            sequence.Append(_canonBarrelView.transform.DOLocalMove(_standardCanonBarrelPosition, 0.05f).SetEase(Ease.OutCirc));
+            sequence.Append(_cannonBarrelView.transform.DOLocalMove(_standardCanonBarrelPosition, 0.05f).SetEase(Ease.OutCirc));
             sequence.Play();
         }
 

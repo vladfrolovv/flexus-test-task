@@ -9,12 +9,12 @@ namespace Installers
     {
 
         [SerializeField] private CameraPanConfig _cameraPanConfig;
-        [SerializeField] private CanonConfig _canonConfig;
+        [SerializeField] private CannonConfig _cannonConfig;
 
         public override void InstallBindings()
         {
             Container.BindInstance(_cameraPanConfig).AsSingle();
-            Container.BindInstance(_canonConfig).AsSingle();
+            Container.BindInstance(_cannonConfig).AsSingle();
         }
 
     }

@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0759fc5a24a348ff91f6f101a92d1624, type: 3}
-  m_Name: CanonConfig
+  m_Name: CannonConfig
   m_EditorClassIdentifier: 
   _maxElevation: 30
   _minElevation: 0
   _elevationSpeed: 0.1
   _powerStep: 0.5
+  _shotCooldown: 0.16
   _cannonballSize: 0.15
   _cannonballThickness: 0.1
   _reflectionVelocityMultiplier: 0.1
   _selfDestructTime: 2.5
+  _velocityToDestroy: 12.5

@@ -13,7 +13,7 @@ namespace Canons.Trajectories
 
         private readonly CannonballLaunchPoint _cannonballLaunchPoint;
         private readonly PowerSliderObserver _powerSliderObserver;
-        private readonly CanonConfig _canonConfig;
+        private readonly CannonConfig _cannonConfig;
 
         private readonly CompositeDisposable _compositeDisposable = new();
 
@@ -21,14 +21,14 @@ namespace Canons.Trajectories
         public IReadOnlyReactiveProperty<TrajectoryInfo> Trajectory => _trajectory;
 
         public Vector3 Velocity =>
-            _cannonballLaunchPoint.Direction * _powerSliderObserver.Power.Value * _canonConfig.PowerStep;
+            _cannonballLaunchPoint.Direction * _powerSliderObserver.Power.Value * _cannonConfig.PowerStep;
 
         public TrajectoryCalculator(PowerSliderObserver powerSliderObserver, KeyboardInput keyboardInput, CannonballLaunchPoint cannonballLaunchPoint,
-                                    CanonConfig canonConfig)
+                                    CannonConfig cannonConfig)
         {
             _cannonballLaunchPoint = cannonballLaunchPoint;
             _powerSliderObserver = powerSliderObserver;
-            _canonConfig = canonConfig;
+            _cannonConfig = cannonConfig;
 
             powerSliderObserver.Power.Subscribe(delegate
             {
@@ -51,7 +51,7 @@ namespace Canons.Trajectories
             Vector3 startPosition = _cannonballLaunchPoint.Position;
             Vector3 direction = _cannonballLaunchPoint.Direction;
 
-            Vector3 velocity = direction * power * _canonConfig.PowerStep;
+            Vector3 velocity = direction * power * _cannonConfig.PowerStep;
             Vector3 horizontalVelocity = new (velocity.x, 0, velocity.z);
             float verticalVelocity = velocity.y;
 

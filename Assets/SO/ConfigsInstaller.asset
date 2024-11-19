@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ConfigsInstaller
   m_EditorClassIdentifier: 
   _cameraPanConfig: {fileID: 11400000, guid: 1a59ef1b64069d24393ee5e689d239ff, type: 2}
-  _canonConfig: {fileID: 11400000, guid: 1aa8d74e83117f540a5ce0123e027f40, type: 2}
+  _cannonConfig: {fileID: 11400000, guid: 1aa8d74e83117f540a5ce0123e027f40, type: 2}

@@ -19,15 +19,15 @@ namespace Canons.CannonBalls
         private CannonballInfo _info;
         private IMemoryPool _pool;
 
-        private CanonConfig _canonConfig;
+        private CannonConfig _cannonConfig;
         private ExplosionEffect _explosionEffect;
         private TrajectoryCalculator _trajectoryCalculator;
 
         [Inject]
-        public void Construct(TrajectoryCalculator trajectoryCalculator, CanonConfig canonConfig, ExplosionEffect explosionEffect)
+        public void Construct(TrajectoryCalculator trajectoryCalculator, CannonConfig cannonConfig, ExplosionEffect explosionEffect)
         {
             _trajectoryCalculator = trajectoryCalculator;
-            _canonConfig = canonConfig;
+            _cannonConfig = cannonConfig;
             _explosionEffect = explosionEffect;
         }
 
@@ -37,7 +37,7 @@ namespace Canons.CannonBalls
             _pool = pool;
 
             _meshFilter.mesh = CannonballMeshGenerator.CreateCannonballMesh(
-                new CannonballMeshInfo(_canonConfig.CannonballSize, _canonConfig.CannonballThickness));
+                new CannonballMeshInfo(_cannonConfig.CannonballSize, _cannonConfig.CannonballThickness));
             _collider.sharedMesh = _meshFilter.mesh;
         }
 
@@ -46,16 +46,15 @@ namespace Canons.CannonBalls
             Vector3 velocity = _trajectoryCalculator.Velocity;
             _collider.OnTriggerEnterAsObservable().Subscribe(delegate(Collider collision)
             {
-                Debug.Log($"Velocity on hit: {velocity} | Velocity magnitude: {velocity.magnitude} | Velocity normalized: {velocity.normalized}");
-                if (velocity.magnitude < _canonConfig.VelocityToDestroy)
+                if (velocity.magnitude < _cannonConfig.VelocityToDestroy)
                 {
                     Dispose();
                     CreateExplosion(collision.transform.rotation);
                     Destroy(gameObject);
                 }
                 Vector3 hitPosition = collision.ClosestPoint(transform.position);
-                Vector3 collisionNormal = (hitPosition - transform.position).normalized;
-                velocity = Vector3.Reflect(velocity, collisionNormal) * _canonConfig.ReflectionVelocityMultiplier;
+                Vector3 collisionNormal = (hitPosition - (transform.position - velocity * 5f)).normalized;
+                velocity = Vector3.Reflect(velocity, collisionNormal) * _cannonConfig.ReflectionVelocityMultiplier;
 
                 if (collision.TryGetComponent(out Wall wall))
                 {
@@ -75,7 +74,7 @@ namespace Canons.CannonBalls
             }).AddTo(_compositeDisposable);
 
             Observable
-                .Timer(TimeSpan.FromSeconds(_canonConfig.SelfDestructTime))
+                .Timer(TimeSpan.FromSeconds(_cannonConfig.SelfDestructTime))
                 .Subscribe(delegate
                 {
                     Dispose();

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 namespace Canons
 {
-    public class CanonBarrelView : MonoBehaviour
+    public class CannonBarrelView : MonoBehaviour
     {
         public Vector3 Position
         {

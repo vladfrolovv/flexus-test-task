@@ -24,9 +24,9 @@ namespace Installers
             Container.Bind<CameraShakeEffect>().FromComponentInHierarchy().AsSingle();
             Container.BindInterfacesAndSelfTo<CameraPanController>().AsSingle().NonLazy();
 
-            Container.Bind<CanonView>().FromComponentInHierarchy().AsSingle();
-            Container.Bind<CanonBarrelView>().FromComponentInHierarchy().AsSingle();
-            Container.BindInterfacesAndSelfTo<CanonPresenter>().AsSingle().NonLazy();
+            Container.Bind<CannonView>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<CannonBarrelView>().FromComponentInHierarchy().AsSingle();
+            Container.BindInterfacesAndSelfTo<CannonPresenter>().AsSingle().NonLazy();
 
             Container.Bind<PowerSliderObserver>().FromComponentInHierarchy().AsSingle();
             Container.Bind<CannonballLaunchPoint>().FromComponentInHierarchy().AsSingle();

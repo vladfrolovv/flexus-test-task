@@ -2,7 +2,7 @@
 namespace Canons
 {
     [CreateAssetMenu(fileName = "CanonConfig", menuName = "SO/CanonConfig")]
-    public class CanonConfig : ScriptableObject
+    public class CannonConfig : ScriptableObject
     {
 
         [Header("Canon Movement")]
@@ -12,6 +12,7 @@ namespace Canons
 
         [Header("Canon Power")]
         [SerializeField] private float _powerStep = 1f;
+        [SerializeField] private float _shotCooldown = .32f;
 
         [Header("Cannonball")]
         [SerializeField] private float _cannonballSize = .25f;
@@ -25,6 +26,7 @@ namespace Canons
         public float ElevationSpeed => _elevationSpeed;
 
         public float PowerStep => _powerStep;
+        public float ShotCooldown => _shotCooldown;
 
         public float CannonballSize => _cannonballSize;
         public float CannonballThickness => _cannonballThickness;
