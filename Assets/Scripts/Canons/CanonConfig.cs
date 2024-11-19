@@ -13,11 +13,18 @@ namespace Canons
         [Header("Canon Power")]
         [SerializeField] private float _powerStep = 1f;
 
+        [Header("Cannonball")]
+        [SerializeField] private float _cannonballSize = .25f;
+        [SerializeField] private float _cannonballThickness = .1f;
+
         public float MaxElevation => _maxElevation;
         public float MinElevation => _minElevation;
         public float ElevationSpeed => _elevationSpeed;
 
         public float PowerStep => _powerStep;
+
+        public float CannonballSize => _cannonballSize;
+        public float CannonballThickness => _cannonballThickness;
 
     }
 }

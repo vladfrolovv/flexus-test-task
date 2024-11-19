@@ -16,6 +16,7 @@ namespace Canons
         private readonly CameraView _cameraView;
         private readonly CameraShakeEffect _cameraShakeEffect;
         private readonly CannonballFactory _cannonballFactory;
+        private readonly CannonballLaunchPoint _cannonballLaunchPoint;
 
         private readonly float _standardCanonBarrelZ;
 
@@ -26,7 +27,7 @@ namespace Canons
         private float _currentPitch;
 
         public CanonPresenter(CanonInput canonInput, KeyboardInput keyboardInput, CanonView canonView, CanonBarrelView canonBarrelView, CanonConfig canonConfig,
-                              CameraView cameraView, CameraShakeEffect cameraShakeEffect, CannonballFactory cannonballFactory)
+                              CameraView cameraView, CameraShakeEffect cameraShakeEffect, CannonballFactory cannonballFactory, CannonballLaunchPoint cannonballLaunchPoint)
         {
             _canonBarrelView = canonBarrelView;
             _canonConfig = canonConfig;
@@ -34,6 +35,7 @@ namespace Canons
             _cameraView = cameraView;
             _cameraShakeEffect = cameraShakeEffect;
             _cannonballFactory = cannonballFactory;
+            _cannonballLaunchPoint = cannonballLaunchPoint;
 
             _standardCanonBarrelZ = _canonBarrelView.LocalPosition.z;
             _distanceFromCamera = Vector2.Distance(
@@ -83,7 +85,8 @@ namespace Canons
         private void Shot()
         {
             Cannonball cannonball = _cannonballFactory.Create(new CannonballInfo());
-            cannonball.transform.position = Vector3.zero;
+            cannonball.transform.position = _cannonballLaunchPoint.Position;
+            cannonball.Launch();
         }
 
         private void AnimateShot()

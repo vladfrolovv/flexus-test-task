@@ -3,12 +3,12 @@ using Canons.CannonBalls;
 using Inputs;
 using UniRx;
 using UnityEngine;
+using Utilities;
 namespace Canons.Trajectories
 {
     public class TrajectoryCalculator : IDisposable
     {
 
-        private const float Gravity = 9.81f;
         private const int Resolution = 32;
 
         private readonly CannonballLaunchPoint _cannonballLaunchPoint;
@@ -19,6 +19,9 @@ namespace Canons.Trajectories
 
         private readonly ReactiveProperty<TrajectoryInfo> _trajectory = new ();
         public IReadOnlyReactiveProperty<TrajectoryInfo> Trajectory => _trajectory;
+
+        public Vector3 Velocity =>
+            _cannonballLaunchPoint.Direction * _powerSliderObserver.Power.Value * _canonConfig.PowerStep;
 
         public TrajectoryCalculator(PowerSliderObserver powerSliderObserver, KeyboardInput keyboardInput, CannonballLaunchPoint cannonballLaunchPoint,
                                     CanonConfig canonConfig)
@@ -59,7 +62,7 @@ namespace Canons.Trajectories
 
                 Vector3 horizontalDisplacement = horizontalVelocity * time;
 
-                float verticalDisplacement = (verticalVelocity * time) - (0.5f * Gravity * time * time);
+                float verticalDisplacement = (verticalVelocity * time) - (0.5f * Constants.Gravity * time * time);
                 trajectoryPoints[i] = startPosition + horizontalDisplacement + new Vector3(0, verticalDisplacement, 0);
             }
             return trajectoryPoints;
