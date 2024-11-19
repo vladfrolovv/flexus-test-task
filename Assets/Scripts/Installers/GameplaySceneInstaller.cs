@@ -37,6 +37,7 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle().NonLazy();
 
             Container.BindInstance(_cannonballHolePrefab);
+            Container.BindInstance(_explosionEffect);
 
             InstallPrefabs();
         }

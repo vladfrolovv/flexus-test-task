@@ -17,6 +17,8 @@ namespace Canons
         [SerializeField] private float _cannonballSize = .25f;
         [SerializeField] private float _cannonballThickness = .1f;
         [SerializeField] private float _reflectionVelocityMultiplier = .25f;
+        [SerializeField] private float _selfDestructTime = 2.5f;
+        [SerializeField] private float _velocityToDestroy = 12.5f;
 
         public float MaxElevation => _maxElevation;
         public float MinElevation => _minElevation;
@@ -28,6 +30,9 @@ namespace Canons
         public float CannonballThickness => _cannonballThickness;
 
         public float ReflectionVelocityMultiplier => _reflectionVelocityMultiplier;
+        public float SelfDestructTime => _selfDestructTime;
+        public float VelocityToDestroy => _velocityToDestroy;
+
 
     }
 }

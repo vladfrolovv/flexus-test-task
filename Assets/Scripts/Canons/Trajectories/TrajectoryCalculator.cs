@@ -30,17 +30,12 @@ namespace Canons.Trajectories
             _powerSliderObserver = powerSliderObserver;
             _canonConfig = canonConfig;
 
-            powerSliderObserver.Power.Subscribe(delegate(float power)
+            powerSliderObserver.Power.Subscribe(delegate
             {
                 RecalculateTrajectory();
             }).AddTo(_compositeDisposable);
 
-            keyboardInput.PitchDirection.Subscribe(delegate(Vector2Int direction)
-            {
-                RecalculateTrajectory();
-            }).AddTo(_compositeDisposable);
-
-            keyboardInput.YawDirection.Subscribe(delegate(Vector2Int direction)
+            keyboardInput.Direction.Subscribe(delegate
             {
                 RecalculateTrajectory();
             }).AddTo(_compositeDisposable);

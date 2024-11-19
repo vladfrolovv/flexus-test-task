@@ -14,17 +14,21 @@ namespace Canons.CannonBalls
         [SerializeField] private MeshFilter _meshFilter;
         [SerializeField] private MeshCollider _collider;
 
+        private readonly CompositeDisposable _compositeDisposable = new ();
+
         private CannonballInfo _info;
         private IMemoryPool _pool;
 
         private CanonConfig _canonConfig;
+        private ExplosionEffect _explosionEffect;
         private TrajectoryCalculator _trajectoryCalculator;
 
         [Inject]
-        public void Construct(TrajectoryCalculator trajectoryCalculator, CanonConfig canonConfig)
+        public void Construct(TrajectoryCalculator trajectoryCalculator, CanonConfig canonConfig, ExplosionEffect explosionEffect)
         {
             _trajectoryCalculator = trajectoryCalculator;
             _canonConfig = canonConfig;
+            _explosionEffect = explosionEffect;
         }
 
         public void OnSpawned(CannonballInfo info, IMemoryPool pool)
@@ -35,8 +39,6 @@ namespace Canons.CannonBalls
             _meshFilter.mesh = CannonballMeshGenerator.CreateCannonballMesh(
                 new CannonballMeshInfo(_canonConfig.CannonballSize, _canonConfig.CannonballThickness));
             _collider.sharedMesh = _meshFilter.mesh;
-
-            _collider.OnTriggerEnterAsObservable();
         }
 
         public void Launch()
@@ -44,6 +46,13 @@ namespace Canons.CannonBalls
             Vector3 velocity = _trajectoryCalculator.Velocity;
             _collider.OnTriggerEnterAsObservable().Subscribe(delegate(Collider collision)
             {
+                Debug.Log($"Velocity on hit: {velocity} | Velocity magnitude: {velocity.magnitude} | Velocity normalized: {velocity.normalized}");
+                if (velocity.magnitude < _canonConfig.VelocityToDestroy)
+                {
+                    Dispose();
+                    CreateExplosion(collision.transform.rotation);
+                    Destroy(gameObject);
+                }
                 Vector3 hitPosition = collision.ClosestPoint(transform.position);
                 Vector3 collisionNormal = (hitPosition - transform.position).normalized;
                 velocity = Vector3.Reflect(velocity, collisionNormal) * _canonConfig.ReflectionVelocityMultiplier;
@@ -52,7 +61,7 @@ namespace Canons.CannonBalls
                 {
                     wall.VisualizeHit(hitPosition);
                 }
-            });
+            }).AddTo(_compositeDisposable);
 
             Observable.EveryUpdate().Subscribe(delegate
             {
@@ -63,9 +72,21 @@ namespace Canons.CannonBalls
                 velocity.y -= Constants.Gravity * Time.deltaTime;
 
                 transform.position = position;
-            });
+            }).AddTo(_compositeDisposable);
 
-            // _pool.Despawn(this);
+            Observable
+                .Timer(TimeSpan.FromSeconds(_canonConfig.SelfDestructTime))
+                .Subscribe(delegate
+                {
+                    Dispose();
+                    CreateExplosion(Quaternion.identity);
+                    Destroy(gameObject);
+                }).AddTo(_compositeDisposable);
+        }
+
+        private void CreateExplosion(Quaternion rotation)
+        {
+            Instantiate(_explosionEffect, transform.position, rotation);
         }
 
         public void OnDespawned()
@@ -74,6 +95,8 @@ namespace Canons.CannonBalls
 
         public void Dispose()
         {
+            _compositeDisposable?.Dispose();
+            _compositeDisposable?.Clear();
         }
 
     }

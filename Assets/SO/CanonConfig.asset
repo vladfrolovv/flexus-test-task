@@ -16,6 +16,7 @@ MonoBehaviour:
   _minElevation: 0
   _elevationSpeed: 0.1
   _powerStep: 0.5
-  _cannonballSize: 0.25
+  _cannonballSize: 0.15
   _cannonballThickness: 0.1
   _reflectionVelocityMultiplier: 0.1
+  _selfDestructTime: 2.5

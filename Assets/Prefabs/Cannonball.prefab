@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 7857688373090064194}
   - component: {fileID: 6921782507120084382}
   - component: {fileID: 2657259144630515559}
-  - component: {fileID: 595644335993433824}
+  - component: {fileID: 1912957702987113500}
   m_Layer: 0
   m_Name: View
   m_TagString: Untagged
@@ -154,7 +154,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!54 &595644335993433824
+--- !u!54 &1912957702987113500
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
