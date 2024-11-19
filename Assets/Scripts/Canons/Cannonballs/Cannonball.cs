@@ -51,6 +51,11 @@ namespace Canons.CannonBalls
                 .Subscribe(delegate(Collision collision)
                 {
                     velocity = Vector3.Reflect(velocity, collision.contacts[0].normal);
+
+                    if (collision.gameObject.TryGetComponent(out Wall wall))
+                    {
+                        wall.VisualizeHit(collision.contacts[0].point + collision.contacts[0].normal * 0.25f);
+                    }
                 });
 
             Observable
