@@ -46,7 +46,8 @@ namespace Canons
 
             CanonRotation();
 
-            keyboardInput.Direction.Subscribe(CanonControls).AddTo(_compositeDisposable);
+            keyboardInput.PitchDirection.Subscribe(CanonBarrelElevation).AddTo(_compositeDisposable);
+            keyboardInput.YawDirection.Subscribe(CanonRotation).AddTo(_compositeDisposable);
             canonInput.ShotInput.Subscribe(delegate (bool b)
             {
                 Shot();
@@ -54,10 +55,9 @@ namespace Canons
             }).AddTo(_compositeDisposable);
         }
 
-        private void CanonControls(Vector2Int direction)
+        private void CanonRotation(Vector2Int direction)
         {
             CanonRotation();
-            CanonBarrelElevation(direction);
         }
 
         private void CanonBarrelElevation(Vector2Int direction)

@@ -35,7 +35,12 @@ namespace Canons.Trajectories
                 RecalculateTrajectory();
             }).AddTo(_compositeDisposable);
 
-            keyboardInput.Direction.Subscribe(delegate(Vector2Int direction)
+            keyboardInput.PitchDirection.Subscribe(delegate(Vector2Int direction)
+            {
+                RecalculateTrajectory();
+            }).AddTo(_compositeDisposable);
+
+            keyboardInput.YawDirection.Subscribe(delegate(Vector2Int direction)
             {
                 RecalculateTrajectory();
             }).AddTo(_compositeDisposable);

@@ -14,7 +14,7 @@ namespace Cameras
         public CameraPanController(KeyboardInput keyboardInput, CameraView cameraView, CameraPanConfig cameraPanConfig)
         {
             keyboardInput
-                .Direction
+                .YawDirection
                 .Subscribe(delegate (Vector2Int direction)
                 {
                     float deltaYaw = direction.x * cameraPanConfig.PanSpeed;

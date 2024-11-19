@@ -13,10 +13,10 @@ namespace Installers
 
         [SerializeField] private Cannonball _cannonballPrefab;
         [SerializeField] private CannonballHole _cannonballHolePrefab;
+        [SerializeField] private ExplosionEffect _explosionEffect;
 
         public override void InstallBindings()
         {
-
             Container.BindInterfacesAndSelfTo<CanonInput>().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<KeyboardInput>().AsSingle().NonLazy();
 
