@@ -12,6 +12,7 @@ namespace Installers
     {
 
         [SerializeField] private Cannonball _cannonballPrefab;
+        [SerializeField] private CannonballHole _cannonballHolePrefab;
 
         public override void InstallBindings()
         {
@@ -34,6 +35,8 @@ namespace Installers
 
             Container.Bind<GraphicRaycaster>().FromComponentInHierarchy().AsSingle();
             Container.BindInterfacesAndSelfTo<InputBlocker>().AsSingle().NonLazy();
+
+            Container.BindInstance(_cannonballHolePrefab);
 
             InstallPrefabs();
         }

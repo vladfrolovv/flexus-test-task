@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8305487990877228}
   - component: {fileID: 5467595690756754204}
   - component: {fileID: 575515520563816462}
+  - component: {fileID: 2303637382963365901}
+  - component: {fileID: 1416137006046939588}
   m_Layer: 0
   m_Name: Wall (0)
   m_TagString: Untagged
@@ -83,6 +85,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2303637382963365901
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250694948207248499}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 6.1232336e-17}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1416137006046939588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250694948207248499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bfd4165ddea4b90981b42e4f73aa5c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolesRT: {fileID: 8400000, guid: 85ab69b85cba46148ac6c06a5edc085a, type: 2}
+  wallMaterial: {fileID: 2100000, guid: 0a15750a6a01e3a46a3dc525a67f408e, type: 2}
 --- !u!1 &748974809906432613
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,6 +131,7 @@ GameObject:
   - component: {fileID: 5794493820914779729}
   - component: {fileID: 6178663571489824376}
   - component: {fileID: 4921399722994201839}
+  - component: {fileID: 35246651667206313}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -166,6 +204,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &35246651667206313
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748974809906432613}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2642136041204927957
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,6 +269,8 @@ GameObject:
   - component: {fileID: 5422063156618192519}
   - component: {fileID: 4568529555838793932}
   - component: {fileID: 4243854261280320242}
+  - component: {fileID: 8576607872280206650}
+  - component: {fileID: 8238618400560401652}
   m_Layer: 0
   m_Name: Wall (1)
   m_TagString: Untagged
@@ -282,6 +343,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8576607872280206650
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6388660950366682859}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 6.1232336e-17}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8238618400560401652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6388660950366682859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bfd4165ddea4b90981b42e4f73aa5c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletHolesRT: {fileID: 8400000, guid: 85ab69b85cba46148ac6c06a5edc085a, type: 2}
+  wallMaterial: {fileID: 2100000, guid: 0a15750a6a01e3a46a3dc525a67f408e, type: 2}
 --- !u!1 &7449760523116497749
 GameObject:
   m_ObjectHideFlags: 0

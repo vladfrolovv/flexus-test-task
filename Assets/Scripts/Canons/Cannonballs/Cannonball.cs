@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Collections;
 using Canons.Trajectories;
+using Obstacles;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using Utilities;
 using Zenject;
@@ -10,6 +12,7 @@ namespace Canons.CannonBalls
     {
 
         [SerializeField] private MeshFilter _meshFilter;
+        [SerializeField] private MeshCollider _collider;
 
         private CannonballInfo _info;
         private IMemoryPool _pool;
@@ -31,35 +34,38 @@ namespace Canons.CannonBalls
 
             _meshFilter.mesh = CannonballMeshGenerator.CreateCannonballMesh(
                 new CannonballMeshInfo(_canonConfig.CannonballSize, _canonConfig.CannonballThickness));
+            _collider.sharedMesh = _meshFilter.mesh;
+
+            _collider.OnTriggerEnterAsObservable();
         }
 
         public void Launch()
         {
-            StartCoroutine(MoveProjectile());
-        }
-
-        private IEnumerator MoveProjectile()
-        {
-            Vector3 startPosition = transform.position;
-            Vector3 position = startPosition;
-
             Vector3 velocity = _trajectoryCalculator.Velocity;
-
-            float time = 0;
-            while (position.y >= 0)
+            _collider.OnTriggerEnterAsObservable().Subscribe(delegate(Collider collision)
             {
-                position.x = startPosition.x + velocity.x * time;
-                position.z = startPosition.z + velocity.z * time;
-                position.y = startPosition.y + velocity.y * time - 0.5f * Constants.Gravity * time * time;
+                Vector3 hitPosition = collision.ClosestPoint(transform.position);
+                Vector3 collisionNormal = (hitPosition - transform.position).normalized;
+                velocity = Vector3.Reflect(velocity, collisionNormal) * _canonConfig.ReflectionVelocityMultiplier;
+
+                if (collision.TryGetComponent(out Wall wall))
+                {
+                    wall.VisualizeHit(hitPosition);
+                }
+            });
+
+            Observable.EveryUpdate().Subscribe(delegate
+            {
+                Vector3 position = transform.position;
+                position += velocity * Time.deltaTime;
+                position.y -= 0.5f * Constants.Gravity * Time.deltaTime * Time.deltaTime;
+
+                velocity.y -= Constants.Gravity * Time.deltaTime;
 
                 transform.position = position;
+            });
 
-                time += Time.deltaTime;
-
-                yield return null;
-            }
-
-            _pool.Despawn(this);
+            // _pool.Despawn(this);
         }
 
         public void OnDespawned()
