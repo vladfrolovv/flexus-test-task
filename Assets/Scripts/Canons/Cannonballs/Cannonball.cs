@@ -45,36 +45,28 @@ namespace Canons.CannonBalls
         {
             Vector3 velocity = _trajectoryCalculator.Velocity;
             float deltaTime = Time.deltaTime * _cannonConfig.SpeedMultiplier;
-            Observable.EveryUpdate().Subscribe(delegate
-            {
-                // movement
-                Vector3 position = transform.position;
-                position += velocity * deltaTime;
-                position.y -= 0.5f * Constants.Gravity * deltaTime * deltaTime;
 
-                transform.position = position;
-
-                // gravity;
-                velocity += Constants.Gravity * deltaTime * Vector3.down;
-            }).AddTo(_compositeDisposable);
-
-            _collider.OnTriggerEnterAsObservable().Subscribe(delegate(Collider collision)
-            {
-                if (velocity.magnitude < _cannonConfig.VelocityToDestroy)
+            _collider
+                .OnCollisionEnterAsObservable()
+                .Subscribe(delegate(Collision collision)
                 {
-                    Dispose();
-                    CreateExplosion(collision.transform.rotation);
-                    Destroy(gameObject);
-                }
-                Vector3 hitPosition = collision.ClosestPoint(transform.position);
-                Vector3 collisionNormal = (hitPosition - (transform.position - velocity * 5f)).normalized;
-                velocity = Vector3.Reflect(velocity, collisionNormal) * _cannonConfig.ReflectionVelocityMultiplier;
+                    velocity = Vector3.Reflect(velocity, collision.contacts[0].normal);
+                });
 
-                if (collision.TryGetComponent(out Wall wall))
+            Observable
+                .EveryUpdate()
+                .Subscribe(delegate
                 {
-                    wall.VisualizeHit(hitPosition);
-                }
-            }).AddTo(_compositeDisposable);
+                    // movement
+                    Vector3 position = transform.position;
+                    position += velocity * deltaTime;
+                    position.y -= 0.5f * Constants.Gravity * deltaTime * deltaTime;
+
+                    transform.position = position;
+
+                    // gravity;
+                    velocity += Constants.Gravity * deltaTime * Vector3.down;
+                }).AddTo(_compositeDisposable);
 
             SelfDestruct();
         }

@@ -17,7 +17,7 @@ MonoBehaviour:
   _elevationSpeed: 0.1
   _powerStep: 0.5
   _shotCooldown: 0.16
-  _speedMultiplier: 1.5
+  _speedMultiplier: 1.25
   _cannonballSize: 0.15
   _cannonballThickness: 0.1
   _reflectionVelocityMultiplier: 0.1
