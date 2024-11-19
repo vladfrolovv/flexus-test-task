@@ -6,20 +6,21 @@ namespace Canons
     {
 
         [Header("Canon Movement")]
-        [SerializeField] private float _maxElevation = 45f;
+        [SerializeField] private float _maxElevation;
         [SerializeField] private float _minElevation;
-        [SerializeField] private float _elevationSpeed = 1f;
+        [SerializeField] private float _elevationSpeed;
 
         [Header("Canon Power")]
-        [SerializeField] private float _powerStep = 1f;
-        [SerializeField] private float _shotCooldown = .32f;
+        [SerializeField] private float _powerStep;
+        [SerializeField] private float _shotCooldown;
+        [SerializeField] private float _speedMultiplier;
 
         [Header("Cannonball")]
-        [SerializeField] private float _cannonballSize = .25f;
-        [SerializeField] private float _cannonballThickness = .1f;
-        [SerializeField] private float _reflectionVelocityMultiplier = .25f;
-        [SerializeField] private float _selfDestructTime = 2.5f;
-        [SerializeField] private float _velocityToDestroy = 12.5f;
+        [SerializeField] private float _cannonballSize;
+        [SerializeField] private float _cannonballThickness;
+        [SerializeField] private float _reflectionVelocityMultiplier;
+        [SerializeField] private float _selfDestructTime;
+        [SerializeField] private float _velocityToDestroy;
 
         public float MaxElevation => _maxElevation;
         public float MinElevation => _minElevation;
@@ -27,10 +28,10 @@ namespace Canons
 
         public float PowerStep => _powerStep;
         public float ShotCooldown => _shotCooldown;
+        public float SpeedMultiplier => _speedMultiplier;
 
         public float CannonballSize => _cannonballSize;
         public float CannonballThickness => _cannonballThickness;
-
         public float ReflectionVelocityMultiplier => _reflectionVelocityMultiplier;
         public float SelfDestructTime => _selfDestructTime;
         public float VelocityToDestroy => _velocityToDestroy;

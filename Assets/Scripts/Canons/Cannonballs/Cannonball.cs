@@ -44,6 +44,20 @@ namespace Canons.CannonBalls
         public void Launch()
         {
             Vector3 velocity = _trajectoryCalculator.Velocity;
+            float deltaTime = Time.deltaTime * _cannonConfig.SpeedMultiplier;
+            Observable.EveryUpdate().Subscribe(delegate
+            {
+                // movement
+                Vector3 position = transform.position;
+                position += velocity * deltaTime;
+                position.y -= 0.5f * Constants.Gravity * deltaTime * deltaTime;
+
+                transform.position = position;
+
+                // gravity;
+                velocity += Constants.Gravity * deltaTime * Vector3.down;
+            }).AddTo(_compositeDisposable);
+
             _collider.OnTriggerEnterAsObservable().Subscribe(delegate(Collider collision)
             {
                 if (velocity.magnitude < _cannonConfig.VelocityToDestroy)
@@ -62,17 +76,11 @@ namespace Canons.CannonBalls
                 }
             }).AddTo(_compositeDisposable);
 
-            Observable.EveryUpdate().Subscribe(delegate
-            {
-                Vector3 position = transform.position;
-                position += velocity * Time.deltaTime;
-                position.y -= 0.5f * Constants.Gravity * Time.deltaTime * Time.deltaTime;
+            SelfDestruct();
+        }
 
-                velocity.y -= Constants.Gravity * Time.deltaTime;
-
-                transform.position = position;
-            }).AddTo(_compositeDisposable);
-
+        private void SelfDestruct()
+        {
             Observable
                 .Timer(TimeSpan.FromSeconds(_cannonConfig.SelfDestructTime))
                 .Subscribe(delegate

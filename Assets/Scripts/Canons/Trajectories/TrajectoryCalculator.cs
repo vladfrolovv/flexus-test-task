@@ -62,7 +62,8 @@ namespace Canons.Trajectories
 
                 Vector3 horizontalDisplacement = horizontalVelocity * time;
 
-                float verticalDisplacement = (verticalVelocity * time) - (0.5f * Constants.Gravity * time * time);
+                // s = ut + 0.5 * a * t^2
+                float verticalDisplacement = verticalVelocity * time - 0.5f * Constants.Gravity * time * time;
                 trajectoryPoints[i] = startPosition + horizontalDisplacement + new Vector3(0, verticalDisplacement, 0);
             }
             return trajectoryPoints;
