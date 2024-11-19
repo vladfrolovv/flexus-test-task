@@ -18,13 +18,13 @@ namespace Canons
         private readonly CannonballFactory _cannonballFactory;
         private readonly CannonballLaunchPoint _cannonballLaunchPoint;
 
-        private readonly float _standardCanonBarrelZ;
-
         private readonly CompositeDisposable _compositeDisposable = new();
 
         private readonly float _distanceFromCamera;
         private readonly float _angleFromCamera;
         private float _currentPitch;
+
+        private Vector3 _standardCanonBarrelPosition;
 
         public CanonPresenter(CanonInput canonInput, KeyboardInput keyboardInput, CanonView canonView, CanonBarrelView canonBarrelView, CanonConfig canonConfig,
                               CameraView cameraView, CameraShakeEffect cameraShakeEffect, CannonballFactory cannonballFactory, CannonballLaunchPoint cannonballLaunchPoint)
@@ -37,7 +37,7 @@ namespace Canons
             _cannonballFactory = cannonballFactory;
             _cannonballLaunchPoint = cannonballLaunchPoint;
 
-            _standardCanonBarrelZ = _canonBarrelView.LocalPosition.z;
+            _standardCanonBarrelPosition = _canonBarrelView.LocalPosition;
             _distanceFromCamera = Vector2.Distance(
                 new Vector2(_canonView.Position.x, _canonView.Position.z),
                 new Vector2(_cameraView.Position.x, _cameraView.Position.z));
@@ -93,11 +93,10 @@ namespace Canons
         {
             _cameraShakeEffect.Shake();
 
-            // todo change DoLocalMoveZ to DoMove to animate the barrel dependent on its quaternion
             Sequence sequence = DOTween.Sequence();
-            sequence.Append(_canonBarrelView.transform.DOLocalMoveZ(_standardCanonBarrelZ - 0.25f, 0.08f).SetEase(Ease.InBack));
+            sequence.Append(_canonBarrelView.transform.DOLocalMove(_standardCanonBarrelPosition - _cannonballLaunchPoint.Direction * 0.25f, 0.08f).SetEase(Ease.InBack));
             sequence.AppendInterval(0.05f);
-            sequence.Append(_canonBarrelView.transform.DOLocalMoveZ(_standardCanonBarrelZ, 0.05f).SetEase(Ease.OutCirc));
+            sequence.Append(_canonBarrelView.transform.DOLocalMove(_standardCanonBarrelPosition, 0.05f).SetEase(Ease.OutCirc));
             sequence.Play();
         }
 
