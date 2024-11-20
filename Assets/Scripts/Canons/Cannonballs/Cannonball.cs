@@ -60,8 +60,9 @@ namespace Canons.CannonBalls
                     {
                         Dispose();
 
-                        Quaternion offset = Quaternion.Euler(90, 0, 0);
-                        CreateExplosion(Quaternion.LookRotation(collision.contacts[0].normal, Vector3.up) * offset, collision.contacts[0].point);
+                        Quaternion explosionRotation = Quaternion.LookRotation(collision.contacts[0].normal, Vector3.up) * Quaternion.Euler(90, 0, 0);
+                        Vector3 explosionPosition = collision.contacts[0].point - collision.contacts[0].normal * 0.1f;
+                        CreateExplosion(explosionRotation, explosionPosition);
                         Destroy(gameObject);
                     }
 
