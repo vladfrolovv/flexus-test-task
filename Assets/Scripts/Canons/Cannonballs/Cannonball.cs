@@ -23,6 +23,8 @@ namespace Canons.CannonBalls
         private ExplosionEffect _explosionEffect;
         private TrajectoryCalculator _trajectoryCalculator;
 
+        private int _reflectionsCount = 2;
+
         [Inject]
         public void Construct(TrajectoryCalculator trajectoryCalculator, CannonConfig cannonConfig, ExplosionEffect explosionEffect)
         {
@@ -50,11 +52,22 @@ namespace Canons.CannonBalls
                 .OnCollisionEnterAsObservable()
                 .Subscribe(delegate(Collision collision)
                 {
+                    _reflectionsCount--;
                     velocity = Vector3.Reflect(velocity, collision.contacts[0].normal);
+                    velocity *= _cannonConfig.ReflectionVelocityMultiplier;
+
+                    if (_reflectionsCount == 0)
+                    {
+                        Dispose();
+
+                        Quaternion offset = Quaternion.Euler(90, 0, 0);
+                        CreateExplosion(Quaternion.LookRotation(collision.contacts[0].normal, Vector3.up) * offset, collision.contacts[0].point);
+                        Destroy(gameObject);
+                    }
 
                     if (collision.gameObject.TryGetComponent(out Wall wall))
                     {
-                        wall.VisualizeHit(collision.contacts[0].point + collision.contacts[0].normal * 0.25f);
+                        wall.VisualizeHit(collision.contacts[0].point);
                     }
                 });
 
@@ -83,14 +96,14 @@ namespace Canons.CannonBalls
                 .Subscribe(delegate
                 {
                     Dispose();
-                    CreateExplosion(Quaternion.identity);
+                    CreateExplosion(Quaternion.identity, transform.position);
                     Destroy(gameObject);
                 }).AddTo(_compositeDisposable);
         }
 
-        private void CreateExplosion(Quaternion rotation)
+        private void CreateExplosion(Quaternion rotation, Vector3 position)
         {
-            Instantiate(_explosionEffect, transform.position, rotation);
+            Instantiate(_explosionEffect, position, rotation);
         }
 
         public void OnDespawned()

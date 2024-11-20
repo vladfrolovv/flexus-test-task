@@ -22,7 +22,7 @@ namespace Obstacles
         {
             hitPosition -= Vector3.forward * .5f;
             CannonballHole hole = Instantiate(_cannonballHolePrefab, hitPosition, Quaternion.identity, transform);
-            hole.transform.localRotation = transform.localRotation;
+            hole.transform.localRotation = Quaternion.identity;
             _holes.Add(hole);
         }
 
